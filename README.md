@@ -1,6 +1,6 @@
 # arquivoIndexado
 
-Pequeno treino da aula de Algoritmos e Estrutura de dados II, onde eu criei um arquivo binário simples que contém valores de inteiros e seu nome, além de sua respectiva chave de localização. Apesar de ser muito simples eu pretendo inserir uma função para carregar arquivos e escrevê-los no arquivo indexado, armazendo de forma segura os dados.
+Treino da aula de Algoritmos e Estrutura de dados II, onde eu criei um arquivo binário simples que contém valores de inteiros e seu nome, além de sua respectiva chave de localização. Apesar de ser muito simples eu pretendo inserir uma função para carregar arquivos e escrevê-los no arquivo indexado, armazenando de forma segura os dados.
 
 ###Ele é composto de 3 arquivos:
 
