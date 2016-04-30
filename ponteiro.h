@@ -40,10 +40,10 @@ int carregaIndex(CHAVE *raiz){
 
     //verifica se há um valor no cabeçalho, no caso comeco
     if(comeco == 0){
-        printf("\nArquivo vazio, nao há indice.");
+        printf("\nArquivo vazio, não há indice.");
         return;
     }else{
-        printf("\ninicio do index na posicao: %d\n", comeco);
+        //printf("\ninicio do index na posição: %d\n", comeco);
 
         aux = raiz;
 

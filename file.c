@@ -11,6 +11,8 @@
 */
 
 #include <stdio.h>
+#include <locale.h>
+
 #define TAM 21
 
 struct chave{
@@ -26,6 +28,9 @@ typedef struct chave CHAVE;
 //#include "ponteiro.h"
 
 int main(){
+    //setando idioma para português
+    setlocale(LC_ALL,"Portuguese");
+
     int valor,opc=10;
 
     //Criando o ponteiro do index
@@ -36,16 +41,18 @@ int main(){
     //switch para escolher a opção
     while (opc!=0){
         printf("\n1- inicia arquivo vazio\n2- grava novo valor\n3-lista ponteiro\n");
-        printf("\nDigite a opcao: ");
+        printf("\nDigite a opção: ");
         scanf ("%i",&opc);
         switch(opc){
             //gera arquivo vazio
             case 1:
+                system("cls");
                 inicializar();
                 break;
 
             //adiciona novo elemento
             case 2:
+                system("cls");
                 printf("\nDigite o novo valor a ser gravado: ");
                 scanf("%i",&valor);
                 gravando(valor,init);
@@ -53,6 +60,7 @@ int main(){
 
             //lista index
             case 3:
+                system("cls");
                 carregaIndex(init);
                 listarPonteiro(init);
                 break;
