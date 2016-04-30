@@ -37,6 +37,7 @@ int main(){
     CHAVE *init;
     init = (CHAVE*)malloc(sizeof(CHAVE));
     init->antChave=NULL;
+    init->proxChave=NULL;
 
     //switch para escolher a opção
     while (opc!=0){
@@ -69,6 +70,9 @@ int main(){
             case 4:
                 system("cls");
                 retornaValor(init);
+                break;
+            case 5:
+                deletar(init);
                 break;
         }
     }

@@ -47,7 +47,7 @@ void inicializar(){
 */
 void gravando (int val, CHAVE *raiz){
     CHAVE *aux;
-    int pos,comeco;
+    int pos,comeco,newCodigo = 1;
     char nome[TAM];
     printf("\nGravando o valor %i",val);
 
@@ -89,6 +89,9 @@ void gravando (int val, CHAVE *raiz){
     while(aux != NULL){
         fwrite(&aux->nome,sizeof(char),TAM,arq);
         fwrite(&aux->inicio,sizeof(int),1,arq);
+        fwrite(&aux->codigo,sizeof(int),1,arq);
+        newCodigo = aux->codigo + 1;
+
         aux=aux->proxChave;
     }
 
@@ -97,6 +100,7 @@ void gravando (int val, CHAVE *raiz){
     scanf("%20s",nome);
     fwrite(&nome,sizeof(char),TAM,arq);
     fwrite(&pos,sizeof(int),1,arq);
+    fwrite (&newCodigo,sizeof(int),1,arq);
 
     fclose(arq);
 
@@ -134,4 +138,25 @@ void retornaValor(CHAVE *raiz){
     }
     //caso o loop encerre significa que nao foi achado o valor
     printf("\nValor não achado.\n\n");
+}
+
+
+void deletar(CHAVE *raiz){
+    CHAVE *aux=raiz->proxChave;
+    FILE *arq = fopen("arquivo.bin","r+b");
+    int codigo,inicio;
+
+    carregaIndex(raiz);
+    listarPonteiro(raiz);
+
+    printf("\nDigite o codigo a ser deletado: ");
+    scanf("%d",&codigo);
+
+    while(aux != NULL){
+        if(aux->codigo == codigo){
+
+        }
+    }
+    printf("\nCodigo não achado");
+
 }

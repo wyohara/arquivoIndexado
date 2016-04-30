@@ -21,7 +21,7 @@ int carregaIndex(CHAVE *raiz){
     CHAVE *aux;
     CHAVE *novo;
 
-    int comeco,cont=0,fim;
+    int comeco,fim;
 
     FILE *arq;
     arq=fopen("arquivo.bin","rb");
@@ -56,10 +56,11 @@ int carregaIndex(CHAVE *raiz){
             novo->antChave = aux;
             fseek(arq,comeco,SEEK_SET);
 
-            novo->codigo = cont;
             fread(&novo->nome,sizeof(char),TAM,arq);
 
             fread(&novo->inicio,sizeof(int),1,arq);
+
+            fread(&novo->codigo,sizeof(int),1,arq);
 
             novo->proxChave=NULL;
 
@@ -67,7 +68,6 @@ int carregaIndex(CHAVE *raiz){
 
             aux=aux->proxChave;
             novo=novo->proxChave;
-            cont++;
         }
     }
     fclose (arq);
@@ -81,16 +81,16 @@ int carregaIndex(CHAVE *raiz){
 void listarPonteiro(CHAVE *raiz){
     CHAVE *aux;
     aux=raiz->proxChave;
+    int f;
 
     while (aux!=NULL){
 
         printf("\nCodigo: %d", aux->codigo);
         printf("\nNome: %s", aux->nome);
         printf("\ninicio: %d", aux->inicio);
-        printf("\n\n...\n");
+        printf("\n\n...\n\n");
         aux=aux->proxChave;
     }
-    liberaMemoria(raiz);
 }
 
 
@@ -113,3 +113,4 @@ void liberaMemoria(CHAVE *raiz){
         }
     }
 }
+
