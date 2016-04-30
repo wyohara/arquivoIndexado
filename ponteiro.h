@@ -15,6 +15,7 @@
 */
 
 int carregaIndex(CHAVE *raiz){
+    printf("\nGerado index \n");
 
     raiz->proxChave=NULL;
     CHAVE *aux;
@@ -98,7 +99,6 @@ void listarPonteiro(CHAVE *raiz){
     * PARAMETRO raiz - é o ponteiro que aponta para o inicio da lista encadeada
 
 */
-
 void liberaMemoria(CHAVE *raiz){
     CHAVE *aux=raiz->proxChave, *deleta;
     if (aux== NULL){

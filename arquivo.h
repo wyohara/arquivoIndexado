@@ -16,6 +16,16 @@
     **inicChave é o valor inicial para comparar se o arquivo e vazio ou não
 */
 void inicializar(){
+    int sel;
+
+    printf("\nDeseja apagar o arquivo e criar um novo (1 = sim/0 = não)? ");
+
+    scanf("%i",&sel);
+
+    if (sel != 1){
+        printf("\nArquivo nao apagado\n");
+        return;
+    }
 
     printf("\nInicializando um arquivo vazio\n\n");
     FILE *arq;
@@ -90,4 +100,38 @@ void gravando (int val, CHAVE *raiz){
 
     fclose(arq);
 
+}
+
+/*
+    *** função para retornar o valor salvo com base na lista encadeada.
+*/
+
+void retornaValor(CHAVE *raiz){
+    FILE *arq = fopen("arquivo.bin","rb");
+    CHAVE *aux = raiz;
+    int codigo,valor;
+
+    //retorna informação
+    carregaIndex(raiz);
+    listarPonteiro(raiz);
+
+    printf("\n.....................................\nDigite o codigo do valor a ser lido: ");
+
+    //captura o codigo do valor buscado
+    scanf("%i",&codigo);
+    printf("\nBuscando: %i\n\n",codigo);
+
+    while(aux != NULL){
+        if(aux->codigo == codigo){
+            //caso o codigo buscado seja achado, o valor é salvo na variavel valor
+            fseek(arq,aux->inicio,SEEK_SET);
+            fread (&valor,sizeof(int),1,arq);
+            printf("O valor é: %d\n\n",valor);
+        return;
+        }
+        //anda na chave
+        aux=aux->proxChave;
+    }
+    //caso o loop encerre significa que nao foi achado o valor
+    printf("\nValor não achado.\n\n");
 }

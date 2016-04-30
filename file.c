@@ -40,7 +40,7 @@ int main(){
 
     //switch para escolher a opção
     while (opc!=0){
-        printf("\n1- inicia arquivo vazio\n2- grava novo valor\n3-lista ponteiro\n");
+        printf("\n1 - Inicia arquivo vazio\n2 - Grava novo valor\n3 - Lista ponteiro\n4 - Retorna Valor\n 5 - Marca para deleção");
         printf("\nDigite a opção: ");
         scanf ("%i",&opc);
         switch(opc){
@@ -63,6 +63,12 @@ int main(){
                 system("cls");
                 carregaIndex(init);
                 listarPonteiro(init);
+                break;
+
+            //exibe valor
+            case 4:
+                system("cls");
+                retornaValor(init);
                 break;
         }
     }
