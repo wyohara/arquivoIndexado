@@ -88,10 +88,12 @@ void gravando (int val, CHAVE *raiz){
     //executa a gravação do index antigo
     while(aux != NULL){
         fwrite(&aux->nome,sizeof(char),TAM,arq);
-        fwrite(&aux->inicio,sizeof(int),1,arq);
         fwrite(&aux->codigo,sizeof(int),1,arq);
-        newCodigo = aux->codigo + 1;
+        fwrite(&aux->inicio,sizeof(int),1,arq);
 
+        if(aux->codigo!=0){
+            newCodigo = aux->codigo + 1;
+        }
         aux=aux->proxChave;
     }
 
@@ -99,8 +101,8 @@ void gravando (int val, CHAVE *raiz){
     printf("\nDigite o nome do novo elemento: ");
     scanf("%20s",nome);
     fwrite(&nome,sizeof(char),TAM,arq);
-    fwrite(&pos,sizeof(int),1,arq);
     fwrite (&newCodigo,sizeof(int),1,arq);
+    fwrite(&pos,sizeof(int),1,arq);
 
     fclose(arq);
 
@@ -108,22 +110,28 @@ void gravando (int val, CHAVE *raiz){
 
 /*
     *** função para retornar o valor salvo com base na lista encadeada.
+    *** opção 4 do main
 */
 
 void retornaValor(CHAVE *raiz){
     FILE *arq = fopen("arquivo.bin","rb");
     CHAVE *aux = raiz;
-    int codigo,valor;
+    int codigo = 0,valor;
 
     //retorna informação
     carregaIndex(raiz);
     listarPonteiro(raiz);
+    while(codigo == 0){
+        printf("\n.....................................\nDigite o codigo do valor a ser lido: ");
 
-    printf("\n.....................................\nDigite o codigo do valor a ser lido: ");
-
-    //captura o codigo do valor buscado
-    scanf("%i",&codigo);
-    printf("\nBuscando: %i\n\n",codigo);
+        //captura o codigo do valor buscado
+        scanf("%i",&codigo);
+        if(codigo!=0){
+            printf("\nBuscando: %i\n\n",codigo);
+        }else{
+            printf("\nNão é possivel buscar o valor 0, ele é marcado para deleção.\n\n");
+        }
+    }
 
     while(aux != NULL){
         if(aux->codigo == codigo){
@@ -140,23 +148,40 @@ void retornaValor(CHAVE *raiz){
     printf("\nValor não achado.\n\n");
 }
 
+/*
+    ***função para marcar deleção no arquivo indexado com base na lista encadeada
+    ***Para saber se um arquivo foi marcado para deleção e só ver o CODIGO. Se for 0 entao é marcado para deleção
+    * PARAMETRO raiz é o inicio da lista indexada
+*/
 
 void deletar(CHAVE *raiz){
     CHAVE *aux=raiz->proxChave;
     FILE *arq = fopen("arquivo.bin","r+b");
-    int codigo,inicio;
+    int codigo,comeco;
 
+    //Gerando a exibição
     carregaIndex(raiz);
     listarPonteiro(raiz);
 
+    //capturando o codigo a ser deletado
     printf("\nDigite o codigo a ser deletado: ");
     scanf("%d",&codigo);
 
     while(aux != NULL){
+        //busca-se o codigo que bate com o valor buscado
         if(aux->codigo == codigo){
-
+            //é atribuido valor 0 e é regravado
+            aux->codigo=0;
+            fseek(arq,aux->initCodigo,SEEK_SET);
+            fwrite(&aux->codigo,sizeof(int),1,arq);
+            //fecha o arquivo para salvar as mudanças
+            fclose(arq);
+            return;
         }
+        aux=aux->proxChave;
     }
+    //caso aux==null o valor nao foi achado
     printf("\nCodigo não achado");
+    fclose(arq);
 
 }

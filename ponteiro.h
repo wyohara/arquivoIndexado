@@ -58,9 +58,11 @@ int carregaIndex(CHAVE *raiz){
 
             fread(&novo->nome,sizeof(char),TAM,arq);
 
-            fread(&novo->inicio,sizeof(int),1,arq);
+            novo->initCodigo = ftell(arq);
 
             fread(&novo->codigo,sizeof(int),1,arq);
+
+            fread(&novo->inicio,sizeof(int),1,arq);
 
             novo->proxChave=NULL;
 
@@ -84,11 +86,18 @@ void listarPonteiro(CHAVE *raiz){
     int f;
 
     while (aux!=NULL){
+        if(aux->codigo == 0){
+            printf("\n#####Marcado para deleção#####");
+            printf("\nNome: %s", aux->nome);
+            printf("\n\n...\n\n");
 
+        }else{
         printf("\nCodigo: %d", aux->codigo);
+        //printf("\nInicio do Codigo: %d", aux->initCodigo);
         printf("\nNome: %s", aux->nome);
         printf("\ninicio: %d", aux->inicio);
         printf("\n\n...\n\n");
+        }
         aux=aux->proxChave;
     }
 }

@@ -17,6 +17,7 @@
 
 struct chave{
     int codigo;
+    int initCodigo;
     char nome[TAM];
     int inicio;
     int antChave;
@@ -72,6 +73,7 @@ int main(){
                 retornaValor(init);
                 break;
             case 5:
+                system("cls");
                 deletar(init);
                 break;
         }
