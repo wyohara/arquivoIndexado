@@ -91,7 +91,7 @@ void gravando (int val, CHAVE *raiz){
         fwrite(&aux->codigo,sizeof(int),1,arq);
         fwrite(&aux->inicio,sizeof(int),1,arq);
 
-        if(aux->codigo!=0){
+        if(aux->codigo>=newCodigo){
             newCodigo = aux->codigo + 1;
         }
         aux=aux->proxChave;
@@ -182,6 +182,93 @@ void deletar(CHAVE *raiz){
     }
     //caso aux==null o valor nao foi achado
     printf("\nCodigo não achado");
+
+    //encerrando
     fclose(arq);
 
+}
+
+/*
+    *** Função para compactar os dados marcados para a deleção. Usa como base o Index salvo no ponteiro Raiz
+*/
+void compactar(CHAVE *raiz){
+    FILE *ler = fopen("arquivo.bin","rb");
+    //Cria um novo file chamado arq.bin e depois o fecha
+    FILE *escr = fopen("arq.bin","w");
+    fclose(escr);
+
+    //reabre o file arq.bin em modo leitura e escrita
+    escr = fopen("arq.bin","r+b");
+    CHAVE *aux = raiz->proxChave,*mov;
+    int val=10;
+
+    //Gera o index de chaves
+    carregaIndex(raiz);
+
+    //escreve um valor simbolico em arq.bin, futuramente esse valor será o cabeçalho;
+    fwrite(&val, sizeof(int),1,escr);
+
+    printf("\nEscrevendo valor e lendo Index");
+
+    //Loop que recria o arquivo de dados. Ele:
+        ///* Salva em arq.bin os dados que não foram marcados para a deleção
+        ///* Altera o aux->inicio para o valor da nova posição em arq.bin
+        ///* remove os elementos do index que foram deletados (codigo = 0)
+
+    while(aux!=NULL){
+        //caso o elemento nao seja marcado para deleção
+        if(aux->codigo != 0){
+            //posiciona ao final do arquivo arq.bin
+            fseek(escr,0,SEEK_END);
+            //Altera o valor de aux->inicio
+            fseek(ler,aux->inicio,SEEK_SET);
+            aux->inicio = ftell(escr);
+            //reescreve o valor em arq.bin
+            fread(&val,sizeof(int),1,ler);
+            printf("\nVAL: %d",val);
+            fwrite(&val,sizeof(int),1,escr);
+            //caminha com a chave
+            aux=aux->proxChave;
+        //caso seja marcado para a deleção remove o index e nao escreve o valor
+        }else{
+            //a chave do elemento anterior (mov) aponta para o prox elemento de aux(aux->proxChave)
+            mov = aux->antChave;
+            mov->proxChave=aux->proxChave;
+            //remove o elemento que aux aponta
+            free(aux);
+            //atribui novo valor para aux
+            aux=mov->proxChave;
+        }
+    }
+
+    aux=raiz->proxChave;
+
+    //posiciona o ponteiro no final de arq.bin e salva em val, depois posiciona no inicio de arq.bin para escrever  o cabeçalho
+    fseek(escr,0,SEEK_END);
+    val=ftell(escr);
+    fseek(escr,0,SEEK_SET);
+    fwrite(&val,sizeof(int),1,escr);
+
+    printf("\nEscrevendo Index");
+
+    //reescreve o index normalmente
+    while(aux!=NULL){
+        fseek(escr,0,SEEK_END);
+        fwrite(&aux->nome,sizeof(char),TAM,escr);
+        fwrite(&aux->codigo,sizeof(int),1,escr);
+        fwrite(&aux->inicio,sizeof(int),1,escr);
+        aux=aux->proxChave;
+    }
+    //usa a função para apagar os ponteiros
+    liberaMemoria(raiz);
+    //fecha arquivos
+    fclose(ler);
+    fclose(escr);
+    //remove o arquivo antigo
+    remove("arquivo.bin");
+    //nomeia arq.bin com o nome do arquivo antigo
+    rename ("arq.bin", "arquivo.bin");
+    printf("\nCompactado.\n\n");
+
+    return;
 }

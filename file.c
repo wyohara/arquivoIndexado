@@ -9,8 +9,8 @@
     Dados todo o espaço que a informação é gravada, isto é entre o cabeçalho e o index
     index - conjunto de nome e posição de inicio da informação que foi gravada no arquivo indexado
 */
-
 #include <stdio.h>
+#include <stdlib.h>
 #include <locale.h>
 
 #define TAM 21
@@ -42,7 +42,7 @@ int main(){
 
     //switch para escolher a opção
     while (opc!=0){
-        printf("\n1 - Inicia arquivo vazio\n2 - Grava novo valor\n3 - Lista ponteiro\n4 - Retorna Valor\n 5 - Marca para deleção");
+        printf("\n1 - Inicia arquivo vazio\n2 - Grava novo valor\n3 - Lista ponteiro\n4 - Retorna Valor\n5 - Marca para deleção\n6 - Compactação");
         printf("\nDigite a opção: ");
         scanf ("%i",&opc);
         switch(opc){
@@ -75,6 +75,10 @@ int main(){
             case 5:
                 system("cls");
                 deletar(init);
+                break;
+            case 6:
+                system("cls");
+                compactar(init);
                 break;
         }
     }
